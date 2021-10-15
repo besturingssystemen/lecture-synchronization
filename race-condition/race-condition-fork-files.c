@@ -1,9 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
 
 #define ITERATIONS 100
-#define PROCESS_COUNT 2
 #define FILENAME "tmpfile"
 
 int read_int_from_file(int *out)
@@ -49,8 +49,16 @@ int increment_file_value()
     return -1;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        fprintf(stderr, "Please provide the number of processes as an argument\n");
+        exit(-1);
+    }
+
+    int process_count = atoi(argv[1]);
+
     int i, pid = -1;
 
     // Create file with value 0 written to it
@@ -59,7 +67,7 @@ int main()
     fclose(file);
 
     // Fork PROCESS_COUNT processes
-    for (i = 0; i < PROCESS_COUNT - 1; i++)
+    for (i = 0; i < process_count - 1; i++)
     {
         pid = fork();
         if (pid == 0)
@@ -76,10 +84,10 @@ int main()
 
     printf("[%d] Done\n", i);
 
-    // Parent waits for all processes to exit
+    // Parent waits for all processes to exit (pid == 0 in all child processes)
     if (pid != 0)
     {
-        for (int i = 0; i < PROCESS_COUNT; i++)
+        for (int i = 0; i < process_count - 1; i++)
         {
             wait(NULL);
         }
