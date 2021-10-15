@@ -32,7 +32,7 @@ int main()
     pthread_join(increment_thread, NULL);
     pthread_join(decrement_thread, NULL);
 
-    printf("The value of our counter: %d", shared_global_counter);
+    printf("The value of our counter: %d\n", shared_global_counter);
 
     return 0;
 }
