@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
         }
         int value;
         read_int_from_file(&value);
-        printf("End value: %d\n", value);
+        printf("The value of our counter: %d\n", value);
     }
 
     return 0;
