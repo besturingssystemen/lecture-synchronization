@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <pthread.h>
 
 #define ITERATIONS 10000
@@ -13,24 +14,27 @@ void *increment(void *param)
     }
 }
 
-void *decrement(void *param)
+int main(int argc, char *argv[])
 {
-    for (int i = 0; i < ITERATIONS; i++)
+    if (argc != 2)
     {
-        shared_global_counter--;
+        fprintf(stderr, "Please provide the number of threads as an argument\n");
+        exit(-1);
     }
-}
 
-int main()
-{
-    pthread_t increment_thread;
-    pthread_t decrement_thread;
+    int thread_count = atoi(argv[1]);
 
-    pthread_create(&increment_thread, NULL, increment, NULL);
-    pthread_create(&decrement_thread, NULL, decrement, NULL);
+    pthread_t thread_ids[thread_count];
 
-    pthread_join(increment_thread, NULL);
-    pthread_join(decrement_thread, NULL);
+    for (int i = 0; i < thread_count; i++)
+    {
+        pthread_create(&thread_ids[i], NULL, increment, NULL);
+    }
+
+    for (int i = 0; i < thread_count; i++)
+    {
+        pthread_join(thread_ids[i], NULL);
+    }
 
     printf("The value of our counter: %d\n", shared_global_counter);
 
