@@ -13,7 +13,6 @@ void *thread_a_func(void *param)
 {
     acquire(&lock_1);
     printf("[A] Got lock 1\n");
-
     sleep(1);
     acquire(&lock_2);
     printf("[A] Got lock 2\n");
@@ -25,7 +24,6 @@ void *thread_b_func(void *param)
 {
     acquire(&lock_2);
     printf("[B] Got lock 2\n");
-
     sleep(1);
     acquire(&lock_1);
     printf("[B] Got lock 1\n");
